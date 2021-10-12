@@ -42,6 +42,7 @@ if __name__ == "__main__":
     parser.add_argument('--api-key', required=True, type=str, help="")
     parser.add_argument('--api-secret', required=True, type=str, help="")
     parser.add_argument('--api-passphrase', required=True, type=str, help="")
+    parser.add_argument('--verbose', action='store_true')
     args = parser.parse_args()
 
     validate_args(args)
@@ -67,7 +68,8 @@ if __name__ == "__main__":
             f'ERROR: fiat balance check failed with message: {value_fiat}', file=sys.stderr)
         sys.exit(-1)
     else:
-        print(f'Your {fiat} balance is {value_fiat}.')
+        if args.verbose:
+            print(f'Your {fiat} balance is {value_fiat}.')
 
     # check crypto balance
     result_crypto, value_crypto = ex_api.check_balance(crypto)
@@ -76,7 +78,8 @@ if __name__ == "__main__":
             f'ERROR: crypto balance check failed with message: {value_crypto}', file=sys.stderr)
         sys.exit(-1)
     else:
-        print(f'Your {crypto} balance is {value_crypto}.')
+        if args.verbose:
+            print(f'Your {crypto} balance is {value_crypto}.')
 
     if args.amount > float(value_fiat):
         print(
@@ -90,15 +93,17 @@ if __name__ == "__main__":
             f'ERROR: marked order failed {result["message"]}.', file=sys.stderr)
         sys.exit(-1)
     else:
-        print(f'Your market order is {result["status"]}.')
-
+        if args.verbose:
+            print(f'Your market order is {result["status"]}.')
 
     order_id = result['id']
     result = ex_api.get_order(order_id)
 
     while result['status'] != 'done':
-        print(f'Waiting for the order to be closed.')
+        if args.verbose:
+            print(f'Waiting for the order to be closed.')
         time.sleep(0.5)
         result = ex_api.get_order(order_id)
-
-    print(f'Order closed.')
+    
+    if args.verbose:
+        print(f'Order closed.')
