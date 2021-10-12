@@ -1,6 +1,6 @@
 # CryptoBuyBot
 
-CryptoBuyBot is a simple robot that creates a market order on a selected stock exchange with a selected amount. 
+CryptoBuyBot is a simple bot that creates a market order on a selected crypto exchange with a selected amount. 
 
 Functionality is intentionally limited to the minimum necessary. This should make it easier to understand and verify the behavior of CryptoBuyBot. 
 
